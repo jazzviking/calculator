@@ -1,0 +1,86 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 50%;
+  margin: 50px auto;
+  font-size: 6vmin;
+  background-color: lightslategrey;
+  border-radius: 1.75rem;
+  padding: 1em;
+}
+
+.outline {
+  display: flex;
+  flex-direction: column;
+}
+
+.display {
+  border: 0.5em steelblue inset;
+  padding-right: 0.2em;
+  margin: 10px;
+  background-image: linear-gradient(
+    to bottom right,
+    lightgray,
+    hsl(0, 0%, 70%)
+  );
+  font-family: "Stick No Bills", sans-serif;
+  text-align: right;
+  font-size: 6vmin;
+}
+
+table {
+  border-spacing: 0.1em;
+}
+
+.cells {
+  border: 1px darkgray solid;
+  border-radius: 0.25em;
+  background-color: hsl(195, 53%, 90%);
+  text-align: center;
+  padding: 0.5em;
+  box-shadow: 0.125em 0.125em 0.1em hsla(0, 0%, 30%, 0.5);
+}
+.cells:hover {
+  background-color: hsl(195, 100%, 90%);
+  cursor: pointer;
+}
+
+.cells:active {
+  background-color: hsl(195, 100%, 90%);
+  box-shadow: 0.125em 0.125em 0.15em hsla(0, 0%, 30%, 0.2) inset;
+}
+
+.top-container {
+  display: flex;
+  justify-content: center;
+  /* fixme Fix Margin */
+  margin: -30px;
+}
+
+.clear {
+  width: 100px;
+  height: 100px;
+  background-color: gray;
+  padding: 0;
+}
+.change-bg {
+  width: 100px;
+  height: 100px;
+  background-color: darkorange;
+  padding: 0;
+  display: flex;
+}
+
+button {
+  background-color: gainsboro;
+  position: relative;
+  height: 2rem;
+  width: 5rem;
+  border-radius: 0.5rem;
+  top: 35%;
+  left: 10%;
+}
