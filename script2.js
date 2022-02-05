@@ -14,6 +14,7 @@ const formatNumber = (num) =>
 
 const numArr = [];
 let num = "";
+let num1, num2;
 
 numCell.forEach((numCell) =>
   numCell.addEventListener("click", function () {
@@ -45,7 +46,7 @@ document.addEventListener("keydown", function (e) {
 decimal.addEventListener("click", function () {
   if (num === "" || num === "-") {
     display.textContent = "0.";
-    num += ".";
+    num += "0.";
   } else if (num.includes(".")) {
   } else {
     num += ".";
@@ -54,46 +55,54 @@ decimal.addEventListener("click", function () {
 });
 
 // fixme This does not round but also doesn't format number
-// const addedUp = function () {
+// const calculate = function () {
 //   display.textContent = numArr.reduce((a, b) => a + b);
 // };
 
-const addedUp = function () {
-  if (numArr.length === 1) return;
-  if (numArr[1][0] === "-")
-    display.textContent = formatNumber(
-      Number(numArr[0]) - Number(numArr[1].slice(1))
-    );
-  if (numArr[1][0] === "*")
-    display.textContent = formatNumber(
-      Number(numArr[0]) * Number(numArr[1].slice(1))
-    );
-  // console.log(numArr[1].slice(1));
+const calculate = function () {
+  console.log(`Before: num1=${num1}, num2=${num2}`);
+  let answer;
+  if (!num2) return;
+  if (num2[0] === "-")
+    answer = formatNumber(Number(num1) - Number(num2.slice(1)));
+  if (num2[0] === "*")
+    answer = formatNumber(Number(num1) * Number(num2.slice(1)));
+  if (num2[0] === "+")
+    answer = formatNumber(Number(num1) + Number(num2.slice(1)));
+  display.textContent = answer;
+  num1 = answer;
+  num2 = undefined;
+  console.log(`After: num1=${num1}, num2=${num2}, answer=${answer}`);
 };
 
 const doMath = function () {
-  numArr.push(num);
+  if (!num) return;
+  num1 ? (num2 = num) : (num1 = num);
   num = "";
-  console.log(numArr);
-  addedUp();
+  calculate();
 };
 
 // Plus button operations
-plus.addEventListener("click", doMath);
+plus.addEventListener("click", () => {
+  if (!num) return;
+  num1 ? (num2 = num) : (num1 = num);
+  num = "+";
+  calculate();
+});
 
 // Minus button operations
 minus.addEventListener("click", () => {
-  numArr.push(num);
+  if (!num) return;
+  num1 ? (num2 = num) : (num1 = num);
   num = "-";
-  console.log(numArr);
-  addedUp();
+  calculate();
 });
 
 times.addEventListener("click", () => {
-  numArr.push(num);
+  if (!num) return;
+  num1 ? (num2 = num) : (num1 = num);
   num = "*";
-  console.log(numArr);
-  addedUp();
+  calculate();
 });
 
 // Add all numbers in numArr
@@ -120,6 +129,7 @@ document.querySelector(".clear").addEventListener("click", function () {
 document.addEventListener("keydown", function (e) {
   if (e.key === "c") {
     num = "";
+    num1 = num2 = undefined;
     display.textContent = 0;
     numArr.length = 0;
     document.body.style.backgroundColor = "seashell";
