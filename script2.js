@@ -6,7 +6,8 @@ const plus = document.querySelector(".plus");
 const minus = document.querySelector(".minus");
 const decimal = document.querySelector(`.decimal`);
 const numCell = document.querySelectorAll(".num_cell");
-const test = (num) =>
+const times = document.querySelector(".times");
+const formatNumber = (num) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
     num
   );
@@ -18,20 +19,7 @@ numCell.forEach((numCell) =>
   numCell.addEventListener("click", function () {
     num += numCell.textContent;
     console.log(num);
-
-    // fixme this is garbage logic
-    if (num[0] === "-" && num[1] === ".") {
-      display.textContent = `0${num.slice(1)}`;
-    } else if (num[0] === ".") {
-      display.textContent = `0${num}`;
-    } else if (num.slice(-2) === ".0") {
-      display.textContent = `${test(Math.abs(num))}.0`;
-    } else if (num.at(-1) === "0") {
-      console.log("hi");
-      display.textContent = `${test(num)}`;
-    } else {
-      display.textContent = test(Math.abs(num));
-    }
+    display.textContent = num;
   })
 );
 
@@ -46,9 +34,9 @@ document.addEventListener("keydown", function (e) {
     } else if (num[0] === ".") {
       display.textContent = `0${num}`;
     } else if (num[num.length - 1] === "0") {
-      display.textContent = `${test(Math.abs(num))}.0`;
+      display.textContent = `${formatNumber(Math.abs(num))}.0`;
     } else {
-      display.textContent = test(Math.abs(num));
+      display.textContent = formatNumber(Math.abs(num));
     }
   }
 });
@@ -61,7 +49,7 @@ decimal.addEventListener("click", function () {
   } else if (num.includes(".")) {
   } else {
     num += ".";
-    display.textContent = `${test(Math.abs(num))}.`;
+    display.textContent = `${formatNumber(Math.abs(num))}.`;
   }
 });
 
@@ -71,31 +59,41 @@ decimal.addEventListener("click", function () {
 // };
 
 const addedUp = function () {
-  display.textContent = test(numArr.reduce((a, b) => a + b));
-  console.log(numArr);
+  if (numArr.length === 1) return;
+  if (numArr[1][0] === "-")
+    display.textContent = formatNumber(
+      Number(numArr[0]) - Number(numArr[1].slice(1))
+    );
+  if (numArr[1][0] === "*")
+    display.textContent = formatNumber(
+      Number(numArr[0]) * Number(numArr[1].slice(1))
+    );
+  // console.log(numArr[1].slice(1));
 };
 
 const doMath = function () {
-  if (num === "-" || num === "") {
-  } else {
-    numArr.push(Number(num));
-    num = "";
-    console.log(numArr);
-    addedUp();
-  }
+  numArr.push(num);
+  num = "";
+  console.log(numArr);
+  addedUp();
 };
 
 // Plus button operations
 plus.addEventListener("click", doMath);
 
 // Minus button operations
-minus.addEventListener("click", function () {
-  if (num === "-") {
-  } else {
-    numArr.push(Number(num));
-    num = "-";
-    addedUp();
-  }
+minus.addEventListener("click", () => {
+  numArr.push(num);
+  num = "-";
+  console.log(numArr);
+  addedUp();
+});
+
+times.addEventListener("click", () => {
+  numArr.push(num);
+  num = "*";
+  console.log(numArr);
+  addedUp();
 });
 
 // Add all numbers in numArr
@@ -131,7 +129,7 @@ document.addEventListener("keydown", function (e) {
 document.addEventListener("keydown", function (e) {
   if (e.key === "Backspace") {
     num = num.slice(0, -1);
-    display.textContent = test(Math.abs(num));
+    display.textContent = formatNumber(Math.abs(num));
   }
 });
 
