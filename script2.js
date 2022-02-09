@@ -5,9 +5,9 @@ const display = document.querySelector(`.display`);
 const equals = document.querySelector(`.equals`);
 const plus = document.querySelector(".plus");
 const minus = document.querySelector(".minus");
+const times = document.querySelector(".times");
 const decimal = document.querySelector(`.decimal`);
 const numCell = document.querySelectorAll(".num_cell");
-const times = document.querySelector(".times");
 const formatNumber = (num) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
     num
@@ -28,11 +28,12 @@ numCell.forEach((numCell) =>
 
 document.addEventListener("keydown", function (e) {
   if (e.key >= 0 && e.key <= 9) {
-    num += e.key;
+    num === "0" ? (num = e.key) : (num += e.key);
+    display.textContent = num;
     console.log(num);
 
     // fixme this is garbage logic
-    if (num[0] === "-" && num[1] === ".") {
+    /*     if (num[0] === "-" && num[1] === ".") {
       display.textContent = `0${num.slice(1)}`;
     } else if (num[0] === ".") {
       display.textContent = `0${num}`;
@@ -40,7 +41,7 @@ document.addEventListener("keydown", function (e) {
       display.textContent = `${formatNumber(Math.abs(num))}.0`;
     } else {
       display.textContent = formatNumber(Math.abs(num));
-    }
+    } */
   }
 });
 
@@ -171,4 +172,6 @@ document.addEventListener("keydown", function (e) {
 
 // bug CHECK IF FIXED: Oscillating between operators sets stored num to undefined
 // fixme CHECK IF FIXED: Pressing times operator then equals returns 0 (instead of previous storedNum)
+// todo Work on decimal logic
+// todo Work out formatting issues with decimals
 // alert need to sort out the logic and make reuseable functions.
