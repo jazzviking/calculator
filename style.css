@@ -51,7 +51,7 @@ table {
 
 .cells:active {
   background-color: hsl(195, 100%, 90%);
-  box-shadow: 0.125em 0.125em 0.15em hsla(0, 0%, 30%, 0.2) inset;
+  box-shadow: none;
 }
 
 .top-container {

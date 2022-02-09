@@ -1,5 +1,6 @@
 `use strict`;
 
+// Selectors
 const display = document.querySelector(`.display`);
 const equals = document.querySelector(`.equals`);
 const plus = document.querySelector(".plus");
@@ -12,15 +13,16 @@ const formatNumber = (num) =>
     num
   );
 
+// Logic variables
 const numArr = [];
 let num = "";
-let num1, num2;
+let storedNum = "0";
 
 numCell.forEach((numCell) =>
   numCell.addEventListener("click", function () {
-    num += numCell.textContent;
-    console.log(num);
+    num === "0" ? (num = numCell.textContent) : (num += numCell.textContent);
     display.textContent = num;
+    console.log(num);
   })
 );
 
@@ -44,72 +46,85 @@ document.addEventListener("keydown", function (e) {
 
 // numberBtn(decimal);
 decimal.addEventListener("click", function () {
-  if (num === "" || num === "-") {
+  if (num === "" || num === "-" || num === "+" || num === "*" || num === "/") {
     display.textContent = "0.";
     num += "0.";
   } else if (num.includes(".")) {
   } else {
     num += ".";
-    display.textContent = `${formatNumber(Math.abs(num))}.`;
+    display.textContent = `${formatNumber(num)}.`;
   }
 });
 
-// fixme This does not round but also doesn't format number
-// const calculate = function () {
-//   display.textContent = numArr.reduce((a, b) => a + b);
-// };
-
 const calculate = function () {
-  console.log(`Before: num1=${num1}, num2=${num2}`);
-  let answer;
-  if (!num2) return;
-  if (num2[0] === "-")
-    answer = formatNumber(Number(num1) - Number(num2.slice(1)));
-  if (num2[0] === "*")
-    answer = formatNumber(Number(num1) * Number(num2.slice(1)));
-  if (num2[0] === "+")
-    answer = formatNumber(Number(num1) + Number(num2.slice(1)));
-  display.textContent = answer;
-  num1 = answer;
-  num2 = undefined;
-  console.log(`After: num1=${num1}, num2=${num2}, answer=${answer}`);
-};
-
-const doMath = function () {
   if (!num) return;
-  num1 ? (num2 = num) : (num1 = num);
+  console.log(`BEFORE CALC | num: ${num.length}, storedNum: ${storedNum}`);
+  let answer;
+
+  if (num === "+" || num === "-" || num === "*") return;
+  if (num[0] === "-")
+    answer = formatNumber(Number(storedNum) - Number(num.slice(1)));
+  if (num[0] === "*")
+    answer = formatNumber(Number(storedNum) * Number(num.slice(1)));
+  if (num[0] === "+")
+    answer = formatNumber(Number(storedNum) + Number(num.slice(1)));
+  if (num[0] !== "+" && num[0] !== "-" && num[0] !== "*") answer = num;
+
+  display.textContent = answer;
+  storedNum = answer;
   num = "";
-  calculate();
+  console.log(
+    `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
+  );
 };
 
+// todo
 // Plus button operations
 plus.addEventListener("click", () => {
-  if (!num) return;
-  num1 ? (num2 = num) : (num1 = num);
+  if (!num) {
+  } else if (num[0] !== "+" && storedNum === "0") {
+    storedNum = num;
+  } else if (num === "+") {
+    return;
+  } else {
+    calculate();
+  }
   num = "+";
-  calculate();
 });
 
 // Minus button operations
 minus.addEventListener("click", () => {
-  if (!num) return;
-  num1 ? (num2 = num) : (num1 = num);
+  if (!num) {
+  } else if (num[0] !== "-" && storedNum === "0") {
+    storedNum = num;
+  } else if (num === "-") {
+    return;
+  } else {
+    calculate();
+  }
   num = "-";
-  calculate();
 });
 
+// Multiplication button operations
 times.addEventListener("click", () => {
-  if (!num) return;
-  num1 ? (num2 = num) : (num1 = num);
+  if (!num) {
+  } else if (num[0] !== "*" && storedNum === "0") {
+    storedNum = num;
+    console.log(`storedNum = ${num}`);
+  } else if (num === "*") {
+    return;
+  } else {
+    calculate();
+  }
   num = "*";
-  calculate();
 });
 
-// Add all numbers in numArr
-equals.addEventListener(`click`, doMath);
+// Equals
+equals.addEventListener(`click`, calculate);
+
 document.addEventListener(`keydown`, function (e) {
   if (e.key === "Enter") {
-    doMath();
+    calculate();
   }
 });
 
@@ -119,20 +134,19 @@ document.querySelector(".change-bg").addEventListener("click", function () {
 });
 
 // Reset to 0 (also clear bg color)
-document.querySelector(".clear").addEventListener("click", function () {
+const clearCalc = () => {
   num = "";
+  storedNum = "0";
   display.textContent = 0;
   numArr.length = 0;
   document.body.style.backgroundColor = "seashell";
-});
+};
 
-document.addEventListener("keydown", function (e) {
+document.querySelector(".clear").addEventListener("click", clearCalc);
+
+document.addEventListener("keydown", (e) => {
   if (e.key === "c") {
-    num = "";
-    num1 = num2 = undefined;
-    display.textContent = 0;
-    numArr.length = 0;
-    document.body.style.backgroundColor = "seashell";
+    clearCalc();
   }
 });
 
@@ -149,12 +163,12 @@ document.addEventListener("keydown", function (e) {
 
 /* Note 
 
-1. Add multiply/divide
-2. Highlight operator key in use
-3. Add keyboard support
+1. Add theme/color switcher
+2. Highlight operator key in use 
+2. Highlight buttons when typed
 
 */
 
-// bug Oscillating between '-' and '+' always appends '-'
-// bug Decimal disappears when number left of decimal (eg. x.0 will show x)
-// alert need to sort out the logic and make reuseable functions. Probably should rethink num variable and numArr for the mult/div update.
+// bug CHECK IF FIXED: Oscillating between operators sets stored num to undefined
+// fixme CHECK IF FIXED: Pressing times operator then equals returns 0 (instead of previous storedNum)
+// alert need to sort out the logic and make reuseable functions.
