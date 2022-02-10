@@ -18,6 +18,7 @@ const numArr = [];
 let num = "";
 let storedNum = "0";
 
+// Number buttons
 numCell.forEach((numCell) =>
   numCell.addEventListener("click", function () {
     num === "0" ? (num = numCell.textContent) : (num += numCell.textContent);
@@ -31,21 +32,10 @@ document.addEventListener("keydown", function (e) {
     num === "0" ? (num = e.key) : (num += e.key);
     display.textContent = num;
     console.log(num);
-
-    // fixme this is garbage logic
-    /*     if (num[0] === "-" && num[1] === ".") {
-      display.textContent = `0${num.slice(1)}`;
-    } else if (num[0] === ".") {
-      display.textContent = `0${num}`;
-    } else if (num[num.length - 1] === "0") {
-      display.textContent = `${formatNumber(Math.abs(num))}.0`;
-    } else {
-      display.textContent = formatNumber(Math.abs(num));
-    } */
   }
 });
 
-// numberBtn(decimal);
+// Decimal logic
 decimal.addEventListener("click", function () {
   if (num === "" || num === "-" || num === "+" || num === "*" || num === "/") {
     display.textContent = "0.";
@@ -57,6 +47,7 @@ decimal.addEventListener("click", function () {
   }
 });
 
+// Equals logic
 const calculate = function () {
   if (!num) return;
   console.log(`BEFORE CALC | num: ${num.length}, storedNum: ${storedNum}`);
@@ -79,9 +70,8 @@ const calculate = function () {
   );
 };
 
-// todo
 // Plus button operations
-plus.addEventListener("click", () => {
+const pressPlus = () => {
   if (!num) {
   } else if (num[0] !== "+" && storedNum === "0") {
     storedNum = num;
@@ -91,10 +81,15 @@ plus.addEventListener("click", () => {
     calculate();
   }
   num = "+";
+};
+
+plus.addEventListener("click", pressPlus);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "+") pressPlus();
 });
 
 // Minus button operations
-minus.addEventListener("click", () => {
+const pressMinus = () => {
   if (!num) {
   } else if (num[0] !== "-" && storedNum === "0") {
     storedNum = num;
@@ -104,10 +99,15 @@ minus.addEventListener("click", () => {
     calculate();
   }
   num = "-";
+};
+
+minus.addEventListener("click", pressMinus);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "-") pressMinus();
 });
 
 // Multiplication button operations
-times.addEventListener("click", () => {
+const pressTimes = () => {
   if (!num) {
   } else if (num[0] !== "*" && storedNum === "0") {
     storedNum = num;
@@ -118,11 +118,17 @@ times.addEventListener("click", () => {
     calculate();
   }
   num = "*";
+};
+
+times.addEventListener("click", pressTimes);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "*" || e.key === "x") pressTimes();
 });
+
+// TODO ADD DIVIDE OPERATOR
 
 // Equals
 equals.addEventListener(`click`, calculate);
-
 document.addEventListener(`keydown`, function (e) {
   if (e.key === "Enter") {
     calculate();
@@ -151,22 +157,20 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// Delete last number
 document.addEventListener("keydown", function (e) {
   if (e.key === "Backspace") {
     num = num.slice(0, -1);
-    display.textContent = formatNumber(Math.abs(num));
+    display.textContent = num;
   }
 });
-
-// document.addEventListener("keydown", function (e) {
-//   console.log(e.key);
-// });
 
 /* Note 
 
 1. Add theme/color switcher
 2. Highlight operator key in use 
-2. Highlight buttons when typed
+3. Highlight buttons when typed
+4. Probably should get rid of operator in front of number (after completing #3)
 
 */
 
