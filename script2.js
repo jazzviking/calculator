@@ -6,7 +6,9 @@ const equals = document.querySelector(`.equals`);
 const plus = document.querySelector(".plus");
 const minus = document.querySelector(".minus");
 const times = document.querySelector(".times");
+const divide = document.querySelector(".divide");
 const decimal = document.querySelector(`.decimal`);
+const clear = document.querySelector(".clearcalc");
 const numCell = document.querySelectorAll(".num_cell");
 const formatNumber = (num) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
@@ -36,7 +38,7 @@ document.addEventListener("keydown", function (e) {
 });
 
 // Decimal logic
-decimal.addEventListener("click", function () {
+const pressDecimal = () => {
   if (num === "" || num === "-" || num === "+" || num === "*" || num === "/") {
     display.textContent = "0.";
     num += "0.";
@@ -45,6 +47,11 @@ decimal.addEventListener("click", function () {
     num += ".";
     display.textContent = `${formatNumber(num)}.`;
   }
+};
+
+decimal.addEventListener("click", pressDecimal);
+document.addEventListener("keydown", (e) => {
+  if (e.key === ".") pressDecimal();
 });
 
 // Equals logic
@@ -53,14 +60,17 @@ const calculate = function () {
   console.log(`BEFORE CALC | num: ${num.length}, storedNum: ${storedNum}`);
   let answer;
 
-  if (num === "+" || num === "-" || num === "*") return;
+  if (num === "+" || num === "-" || num === "*" || num === "/") return;
   if (num[0] === "-")
     answer = formatNumber(Number(storedNum) - Number(num.slice(1)));
   if (num[0] === "*")
     answer = formatNumber(Number(storedNum) * Number(num.slice(1)));
   if (num[0] === "+")
     answer = formatNumber(Number(storedNum) + Number(num.slice(1)));
-  if (num[0] !== "+" && num[0] !== "-" && num[0] !== "*") answer = num;
+  if (num[0] === "/")
+    answer = formatNumber(Number(storedNum) / Number(num.slice(1)));
+  if (num[0] !== "+" && num[0] !== "-" && num[0] !== "*" && num[0] !== "/")
+    answer = num;
 
   display.textContent = answer;
   storedNum = answer;
@@ -126,6 +136,23 @@ document.addEventListener("keydown", (e) => {
 });
 
 // TODO ADD DIVIDE OPERATOR
+const pressDivide = () => {
+  if (!num) {
+  } else if (num[0] !== "/" && storedNum === "0") {
+    storedNum = num;
+    console.log(`storedNum = ${num}`);
+  } else if (num === "/") {
+    return;
+  } else {
+    calculate();
+  }
+  num = "/";
+};
+
+divide.addEventListener("click", pressDivide);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/") pressDivide();
+});
 
 // Equals
 equals.addEventListener(`click`, calculate);
@@ -140,7 +167,7 @@ document.querySelector(".change-bg").addEventListener("click", function () {
   document.body.style.backgroundColor = "darkorange";
 });
 
-// Reset to 0 (also clear bg color)
+// Reset/Clear Calculator (also clear bg color)
 const clearCalc = () => {
   num = "";
   storedNum = "0";
@@ -149,7 +176,7 @@ const clearCalc = () => {
   document.body.style.backgroundColor = "seashell";
 };
 
-document.querySelector(".clear").addEventListener("click", clearCalc);
+clear.addEventListener("click", clearCalc);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "c") {
@@ -157,6 +184,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// FIXME This doesn't work
 // Delete last number
 document.addEventListener("keydown", function (e) {
   if (e.key === "Backspace") {
@@ -174,8 +202,7 @@ document.addEventListener("keydown", function (e) {
 
 */
 
-// bug CHECK IF FIXED: Oscillating between operators sets stored num to undefined
-// fixme CHECK IF FIXED: Pressing times operator then equals returns 0 (instead of previous storedNum)
 // todo Work on decimal logic
 // todo Work out formatting issues with decimals
-// alert need to sort out the logic and make reuseable functions.
+// todo Figure out +/- key (currently # to keep column widths even)
+// BUG something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit?

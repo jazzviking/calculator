@@ -61,12 +61,6 @@ table {
   margin: -30px;
 }
 
-.clear {
-  width: 100px;
-  height: 100px;
-  background-color: gray;
-  padding: 0;
-}
 .change-bg {
   width: 100px;
   height: 100px;

@@ -1,80 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-<link href="https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@200&display=swap" rel="stylesheet">
-  <script defer src="script2.js"></script>
-</head>
-<body>  
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@200&display=swap"
+      rel="stylesheet"
+    />
+    <script defer src="script2.js"></script>
+  </head>
+  <body>
     <div class="top-container">
-        <div class="clear"><button>clear</button></div> 
-        <div class="change-bg"></div> 
+      <!-- <div class="clear"><button>clear</button></div> -->
+      <div class="change-bg"></div>
     </div>
     <div class="container">
-        <div class="outline">
-            <div class="display">0</div>
-            <table>
-                <tr class="row row1"></tr>
-                    <td>
-                        <div class="row1cells cells seven num_cell">7</div>
-                    </td>
-                    <td>
-                        <div class="row1cells cells eight num_cell">8</div>
-                    </td>
-                    <td>
-                        <div class="row1cells cells nine num_cell">9</div>
-                    </td>
-                    <td>
-                        <div class="row1cells cells plus">+</div>
-                    </td>
-                </tr>
-                <tr class="row row2">
-                    <td>
-                        <div class="row2cells cells four num_cell">4</div>
-                    </td>
-                    <td>
-                        <div class="row2cells cells five num_cell">5</div>
-                    </td>
-                    <td>
-                        <div class="row2cells cells six num_cell">6</div>
-                    </td>
-                    <td>
-                        <div class="row2cells cells minus">-</div>
-                    </td>
-                </tr>
-                <tr class="row row3">
-                    <td>
-                        <div class="row3cells cells one num_cell" id="one">1</div>
-                    </td>
-                    <td>
-                        <div class="row3cells cells two num_cell">2</div>
-                    </td>
-                    <td>
-                        <div class="row3cells cells three num_cell">3</div>
-                    </td>
-                    <td class="cells times">
-                        <div>x</div>
-                    </td>
-                </tr>
-                <tr class="row row4">
-                    <td colspan="2"><div class="row4cells cells zero num_cell">0</div>
-                    </td>
-                    <td><div class="row4cells cells decimal">.</div></td>
-                    <td class="cells equals">=</td>
-                    <td></td>
-                </tr>
-
-            </table>
-
-
-        </div>
+      <div class="outline">
+        <div class="display">0</div>
+        <table>
+          <tr class="row row1">
+            <td colspan="2">
+              <div class="row1cells cells clearcalc">C</div>
+            </td>
+            <td>
+              <div class="row1cells cells plusminus">#</div>
+            </td>
+            <td>
+              <div class="row1cells cells plus">+</div>
+            </td>
+          </tr>
+          <tr class="row row2">
+            <td>
+              <div class="row2cells cells seven num_cell">7</div>
+            </td>
+            <td>
+              <div class="row2cells cells eight num_cell">8</div>
+            </td>
+            <td>
+              <div class="row2cells cells nine num_cell">9</div>
+            </td>
+            <td>
+              <div class="row2cells cells minus">-</div>
+            </td>
+          </tr>
+          <tr class="row row3">
+            <td>
+              <div class="row3cells cells four num_cell">4</div>
+            </td>
+            <td>
+              <div class="row3cells cells five num_cell">5</div>
+            </td>
+            <td>
+              <div class="row3cells cells six num_cell">6</div>
+            </td>
+            <td>
+              <div class="row3cells cells times">x</div>
+            </td>
+          </tr>
+          <tr class="row row4">
+            <td>
+              <div class="row4cells cells one num_cell" id="one">1</div>
+            </td>
+            <td>
+              <div class="row4cells cells two num_cell">2</div>
+            </td>
+            <td>
+              <div class="row4cells cells three num_cell">3</div>
+            </td>
+            <td><div class="row4cells cells divide">/</div></td>
+          </tr>
+          <tr class="row row5">
+            <td colspan="2">
+              <div class="row5cells cells zero num_cell">0</div>
+            </td>
+            <td>
+              <div class="row5cells cells decimal">.</div>
+            </td>
+            <td>
+              <div class="row5cells cells equals">=</div>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-  
-</body>
+  </body>
 </html>
