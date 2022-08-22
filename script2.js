@@ -206,5 +206,3 @@ document.addEventListener('keydown', function (e) {
 // todo Work out formatting issues with decimals
 // todo Figure out +/- key (currently # to keep column widths even)
 // BUG something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit?
-
-console.log('hi');
