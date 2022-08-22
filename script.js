@@ -2,9 +2,9 @@
 
 const display = document.querySelector(`.display`);
 const equals = document.querySelector(`.equals`);
-const plus = document.querySelector(".plus");
-const minus = document.querySelector(".minus");
-const zero = document.querySelector(".zero");
+const plus = document.querySelector('.plus');
+const minus = document.querySelector('.minus');
+const zero = document.querySelector('.zero');
 const one = document.querySelector(`.one`);
 const two = document.querySelector(`.two`);
 const three = document.querySelector(`.three`);
@@ -17,14 +17,14 @@ const nine = document.querySelector(`.nine`);
 const decimal = document.querySelector(`.decimal`);
 
 const numArr = [];
-let num = "";
+let num = '';
 
 // Diplay clicked number(s) and stores to 'num' variable
 const numberBtn = function (numberClick) {
-  numberClick.addEventListener("click", function () {
+  numberClick.addEventListener('click', function () {
     num += numberClick.textContent;
     console.log(num);
-    if (num[0] === ".") {
+    if (num[0] === '.') {
       display.textContent = `0${num}`;
     } /* else if (num.includes(".") && num[num.length - 1] === "0") {
       if (num[0] === "-") {
@@ -53,14 +53,14 @@ numberBtn(eight);
 numberBtn(nine);
 
 // numberBtn(decimal);
-decimal.addEventListener("click", function () {
-  if (num === "" || num === "-") {
-    display.textContent = "0.";
-    num += ".";
-  } else if (num === "-." || num.includes(".")) {
+decimal.addEventListener('click', function () {
+  if (num === '' || num === '-') {
+    display.textContent = '0.';
+    num += '.';
+  } else if (num === '-.' || num.includes('.')) {
   } else {
     console.log(num.at(-1));
-    num += ".";
+    num += '.';
     display.textContent = `${Math.abs(num)}.`;
   }
 });
@@ -79,24 +79,24 @@ const addedUp = function () {
 };
 
 const doMath = function () {
-  if (num === "-" || num === "") {
+  if (num === '-' || num === '') {
   } else {
     numArr.push(Number(num));
-    num = "";
+    num = '';
     console.log(numArr);
     addedUp();
   }
 };
 
 // Plus button operations
-plus.addEventListener("click", doMath);
+plus.addEventListener('click', doMath);
 
 // Minus button operations
-minus.addEventListener("click", function () {
-  if (num === "-") {
+minus.addEventListener('click', function () {
+  if (num === '-') {
   } else {
     numArr.push(Number(num));
-    num = "-";
+    num = '-';
     addedUp();
   }
 });
@@ -105,16 +105,16 @@ minus.addEventListener("click", function () {
 equals.addEventListener(`click`, doMath);
 
 // Change bg color
-document.querySelector(".change-bg").addEventListener("click", function () {
-  document.body.style.backgroundColor = "darkorange";
+document.querySelector('.change-bg').addEventListener('click', function () {
+  document.body.style.backgroundColor = 'darkorange';
 });
 
 // Reset to 0 (also clear bg color)
-document.querySelector(".clear").addEventListener("click", function () {
-  num = "";
+document.querySelector('.clear').addEventListener('click', function () {
+  num = '';
   display.textContent = 0;
   numArr.length = 0;
-  document.body.style.backgroundColor = "seashell";
+  document.body.style.backgroundColor = 'seashell';
 });
 
 /* Note 
@@ -127,3 +127,5 @@ document.querySelector(".clear").addEventListener("click", function () {
 
 // bug Oscillating between '-' and '+' always appends '-'
 // bug Decimal disappears when number left of decimal (eg. x.0 will show x)
+
+console.log('hi');
