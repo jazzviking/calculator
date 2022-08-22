@@ -127,5 +127,3 @@ document.querySelector('.clear').addEventListener('click', function () {
 
 // bug Oscillating between '-' and '+' always appends '-'
 // bug Decimal disappears when number left of decimal (eg. x.0 will show x)
-
-console.log('hi');
