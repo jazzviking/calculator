@@ -10,6 +10,7 @@ const divide = document.querySelector('.divide');
 const decimal = document.querySelector(`.decimal`);
 const clear = document.querySelector('.clearcalc');
 const numCell = document.querySelectorAll('.num_cell');
+
 const formatNumber = (num) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
     num
@@ -184,10 +185,12 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// FIXME This doesn't work
+// FIXME Maybe fixed? Requires further testing
 // Delete last number
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Backspace') {
+    if (!num || num === '+' || num === '-' || num === '*' || num === '/')
+      return;
     num = num.slice(0, -1);
     display.textContent = num;
   }

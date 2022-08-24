@@ -2,10 +2,12 @@ html,
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .container {
   width: 50%;
+
   margin: 50px auto;
   font-size: 6vmin;
   background-color: lightslategrey;
@@ -27,13 +29,17 @@ body {
     lightgray,
     hsl(0, 0%, 70%)
   );
-  font-family: "Stick No Bills", sans-serif;
+  font-family: 'Stick No Bills', sans-serif;
   text-align: right;
   font-size: 6vmin;
 }
 
 table {
   border-spacing: 0.1em;
+}
+
+.plusminus {
+  font-size: 0.85em;
 }
 
 .cells {
@@ -44,6 +50,7 @@ table {
   padding: 0.5em;
   box-shadow: 0.125em 0.125em 0.1em hsla(0, 0%, 30%, 0.5);
 }
+
 .cells:hover {
   background-color: hsl(195, 100%, 90%);
   cursor: pointer;
