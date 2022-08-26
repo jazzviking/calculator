@@ -18,12 +18,11 @@ const formatNumber = (passedNum) =>
   );
 
 // Logic variables
-const numArr = [];
 let num = '';
 let storedNum = '0';
+let operator;
 
 // Number buttons
-
 const enterNumbers = (enteredNumber) => {
   if (num === '0') {
     num = enteredNumber;
@@ -190,7 +189,7 @@ const clearCalc = () => {
   num = '';
   storedNum = '0';
   display.textContent = 0;
-  numArr.length = 0;
+
   document.body.style.backgroundColor = 'seashell';
 };
 
