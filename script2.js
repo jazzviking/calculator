@@ -10,10 +10,11 @@ const divide = document.querySelector('.divide');
 const decimal = document.querySelector(`.decimal`);
 const clear = document.querySelector('.clearcalc');
 const numCell = document.querySelectorAll('.num_cell');
+const plusMinus = document.querySelector('.plusminus');
 
-const formatNumber = (num) =>
+const formatNumber = (passedNum) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
-    num
+    passedNum
   );
 
 // Logic variables
@@ -22,19 +23,38 @@ let num = '';
 let storedNum = '0';
 
 // Number buttons
+
+const enterNumbers = (enteredNumber) => {
+  if (num === '0') {
+    num = enteredNumber;
+  } else if (
+    (num === '-' || num === '+' || num === '*' || num === '/') &&
+    enteredNumber === '0'
+  ) {
+    return;
+  } else {
+    num += enteredNumber;
+  }
+  display.textContent = num;
+};
+
 numCell.forEach((numCell) =>
   numCell.addEventListener('click', function () {
-    num === '0' ? (num = numCell.textContent) : (num += numCell.textContent);
-    display.textContent = num;
-    console.log(num);
+    // console.log(num);
+    // num === '0' ? (num = numCell.textContent) : (num += numCell.textContent);
+    // display.textContent = num;
+
+    enterNumbers(numCell.textContent);
   })
 );
 
 document.addEventListener('keydown', function (e) {
   if (e.key >= 0 && e.key <= 9) {
-    num === '0' ? (num = e.key) : (num += e.key);
-    display.textContent = num;
-    console.log(num);
+    // num === '0' ? (num = e.key) : (num += e.key);
+    // display.textContent = num;
+    // console.log(num);
+
+    enterNumbers(e.key);
   }
 });
 
@@ -58,27 +78,23 @@ document.addEventListener('keydown', (e) => {
 // Equals logic
 const calculate = function () {
   if (!num) return;
-  console.log(`BEFORE CALC | num: ${num.length}, storedNum: ${storedNum}`);
+
   let answer;
 
   if (num === '+' || num === '-' || num === '*' || num === '/') return;
-  if (num[0] === '-')
-    answer = formatNumber(Number(storedNum) - Number(num.slice(1)));
-  if (num[0] === '*')
-    answer = formatNumber(Number(storedNum) * Number(num.slice(1)));
-  if (num[0] === '+')
-    answer = formatNumber(Number(storedNum) + Number(num.slice(1)));
-  if (num[0] === '/')
-    answer = formatNumber(Number(storedNum) / Number(num.slice(1)));
+  if (num[0] === '-') answer = Number(storedNum) - Number(num.slice(1));
+  if (num[0] === '*') answer = Number(storedNum) * Number(num.slice(1));
+  if (num[0] === '+') answer = Number(storedNum) + Number(num.slice(1));
+  if (num[0] === '/') answer = Number(storedNum) / Number(num.slice(1));
   if (num[0] !== '+' && num[0] !== '-' && num[0] !== '*' && num[0] !== '/')
     answer = num;
 
-  display.textContent = answer;
   storedNum = answer;
+  display.textContent = formatNumber(answer);
   num = '';
-  console.log(
-    `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
-  );
+  // console.log(
+  //   `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
+  // );
 };
 
 // Plus button operations
@@ -92,6 +108,7 @@ const pressPlus = () => {
     calculate();
   }
   num = '+';
+  console.log(`press plus num = ${num} | storedNum = ${storedNum}`);
 };
 
 plus.addEventListener('click', pressPlus);
@@ -136,7 +153,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === '*' || e.key === 'x') pressTimes();
 });
 
-// TODO ADD DIVIDE OPERATOR
+// Division button operations
 const pressDivide = () => {
   if (!num) {
   } else if (num[0] !== '/' && storedNum === '0') {
@@ -191,7 +208,11 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Backspace') {
     if (!num || num === '+' || num === '-' || num === '*' || num === '/')
       return;
-    num = num.slice(0, -1);
+    if (num.length === 1) {
+      num = 0;
+    } else {
+      num = num.slice(0, -1);
+    }
     display.textContent = num;
   }
 });
@@ -200,12 +221,13 @@ document.addEventListener('keydown', function (e) {
 
 1. Add theme/color switcher
 2. Highlight operator key in use 
-3. Highlight buttons when typed
-4. Probably should get rid of operator in front of number (after completing #3)
+3. Create operator variable? 
+4. Highlight buttons when typed
+5. Probably should get rid of operator in front of number (after completing #3) **This will fix the decimal problem where the operator shows up on pressing the number after the decimal. 
 
 */
 
 // todo Work on decimal logic
 // todo Work out formatting issues with decimals
-// todo Figure out +/- key (currently # to keep column widths even)
-// BUG something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit?
+// todo Figure out +/- key logic and column width
+// **Fixed** something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit? || Using the formatNumber() function inside of the calculations for each operator caused storedNum to have commas, creating the NaN issue. Solved by only formatting the number on output to calc display.
