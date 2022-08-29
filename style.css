@@ -49,6 +49,8 @@ table {
   text-align: center;
   padding: 0.5em;
   box-shadow: 0.125em 0.125em 0.1em hsla(0, 0%, 30%, 0.5);
+
+  transition: all 175ms;
 }
 
 .cells:hover {
@@ -84,4 +86,12 @@ button {
   border-radius: 0.5rem;
   top: 35%;
   left: 10%;
+}
+
+.active-cell,
+.active-cell:hover {
+  background-color: #444;
+  color: #eee;
+  box-shadow: none;
+  border: none;
 }

@@ -75,6 +75,12 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Equals logic
+const clearActiveOperator = () => {
+  [plus, minus, times, divide].forEach((operator) =>
+    operator.classList.remove('active-cell')
+  );
+};
+
 const calculate = function () {
   if (!num) return;
 
@@ -91,6 +97,7 @@ const calculate = function () {
   storedNum = answer;
   display.textContent = formatNumber(answer);
   num = '';
+  clearActiveOperator();
   // console.log(
   //   `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
   // );
@@ -98,6 +105,8 @@ const calculate = function () {
 
 // Plus button operations
 const pressPlus = () => {
+  clearActiveOperator();
+
   if (!num) {
   } else if (num[0] !== '+' && storedNum === '0') {
     storedNum = num;
@@ -106,6 +115,7 @@ const pressPlus = () => {
   } else {
     calculate();
   }
+  plus.classList.add('active-cell');
   num = '+';
   console.log(`press plus num = ${num} | storedNum = ${storedNum}`);
 };
@@ -117,6 +127,8 @@ document.addEventListener('keydown', (e) => {
 
 // Minus button operations
 const pressMinus = () => {
+  clearActiveOperator();
+
   if (!num) {
   } else if (num[0] !== '-' && storedNum === '0') {
     storedNum = num;
@@ -125,6 +137,7 @@ const pressMinus = () => {
   } else {
     calculate();
   }
+  minus.classList.add('active-cell');
   num = '-';
 };
 
@@ -135,6 +148,8 @@ document.addEventListener('keydown', (e) => {
 
 // Multiplication button operations
 const pressTimes = () => {
+  clearActiveOperator();
+
   if (!num) {
   } else if (num[0] !== '*' && storedNum === '0') {
     storedNum = num;
@@ -144,6 +159,7 @@ const pressTimes = () => {
   } else {
     calculate();
   }
+  times.classList.add('active-cell');
   num = '*';
 };
 
@@ -154,6 +170,8 @@ document.addEventListener('keydown', (e) => {
 
 // Division button operations
 const pressDivide = () => {
+  clearActiveOperator();
+
   if (!num) {
   } else if (num[0] !== '/' && storedNum === '0') {
     storedNum = num;
@@ -163,6 +181,7 @@ const pressDivide = () => {
   } else {
     calculate();
   }
+  divide.classList.add('active-cell');
   num = '/';
 };
 
@@ -189,6 +208,8 @@ const clearCalc = () => {
   num = '';
   storedNum = '0';
   display.textContent = 0;
+
+  clearActiveOperator();
 
   document.body.style.backgroundColor = 'seashell';
 };
@@ -229,4 +250,5 @@ document.addEventListener('keydown', function (e) {
 // todo Work on decimal logic
 // todo Work out formatting issues with decimals
 // todo Figure out +/- key logic and column width
+// todo Need to fix zero so that a number can be added, subtracted, mult, div by zero.
 // **Fixed** something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit? || Using the formatNumber() function inside of the calculations for each operator caused storedNum to have commas, creating the NaN issue. Solved by only formatting the number on output to calc display.
