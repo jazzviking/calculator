@@ -1,152 +1,254 @@
 `use strict`;
 
+// Selectors
 const display = document.querySelector(`.display`);
 const equals = document.querySelector(`.equals`);
-const plus = document.querySelector(".plus");
-const minus = document.querySelector(".minus");
+const plus = document.querySelector('.plus');
+const minus = document.querySelector('.minus');
+const times = document.querySelector('.times');
+const divide = document.querySelector('.divide');
 const decimal = document.querySelector(`.decimal`);
-const numCell = document.querySelectorAll(".num_cell");
-const test = (num) =>
+const clear = document.querySelector('.clearcalc');
+const numCell = document.querySelectorAll('.num_cell');
+const plusMinus = document.querySelector('.plusminus');
+
+const formatNumber = (passedNum) =>
   new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
-    num
+    passedNum
   );
 
-const numArr = [];
-let num = "";
+// Logic variables
+let num = '';
+let storedNum = '0';
+let operator;
+
+// Number buttons
+const enterNumbers = (enteredNumber) => {
+  if (num === '0') {
+    num = enteredNumber;
+  } else if (
+    (num === '-' || num === '+' || num === '*' || num === '/') &&
+    enteredNumber === '0'
+  ) {
+    return;
+  } else {
+    num += enteredNumber;
+  }
+  display.textContent = num;
+};
 
 numCell.forEach((numCell) =>
-  numCell.addEventListener("click", function () {
-    num += numCell.textContent;
-    console.log(num);
+  numCell.addEventListener('click', function () {
+    // console.log(num);
+    // num === '0' ? (num = numCell.textContent) : (num += numCell.textContent);
+    // display.textContent = num;
 
-    // fixme this is garbage logic
-    if (num[0] === "-" && num[1] === ".") {
-      display.textContent = `0${num.slice(1)}`;
-    } else if (num[0] === ".") {
-      display.textContent = `0${num}`;
-    } else if (num.slice(-2) === ".0") {
-      display.textContent = `${test(Math.abs(num))}.0`;
-    } else if (num.at(-1) === "0") {
-      console.log("hi");
-      display.textContent = `${test(num)}`;
-    } else {
-      display.textContent = test(Math.abs(num));
-    }
+    enterNumbers(numCell.textContent);
   })
 );
 
-document.addEventListener("keydown", function (e) {
+document.addEventListener('keydown', function (e) {
   if (e.key >= 0 && e.key <= 9) {
-    num += e.key;
-    console.log(num);
+    // num === '0' ? (num = e.key) : (num += e.key);
+    // display.textContent = num;
+    // console.log(num);
 
-    // fixme this is garbage logic
-    if (num[0] === "-" && num[1] === ".") {
-      display.textContent = `0${num.slice(1)}`;
-    } else if (num[0] === ".") {
-      display.textContent = `0${num}`;
-    } else if (num[num.length - 1] === "0") {
-      display.textContent = `${test(Math.abs(num))}.0`;
-    } else {
-      display.textContent = test(Math.abs(num));
-    }
+    enterNumbers(e.key);
   }
 });
 
-// numberBtn(decimal);
-decimal.addEventListener("click", function () {
-  if (num === "" || num === "-") {
-    display.textContent = "0.";
-    num += ".";
-  } else if (num.includes(".")) {
+// Decimal logic
+const pressDecimal = () => {
+  if (num === '' || num === '-' || num === '+' || num === '*' || num === '/') {
+    display.textContent = '0.';
+    num += '0.';
+  } else if (num.includes('.')) {
   } else {
-    num += ".";
-    display.textContent = `${test(Math.abs(num))}.`;
+    num += '.';
+    display.textContent = `${formatNumber(num)}.`;
   }
-});
-
-// fixme This does not round but also doesn't format number
-// const addedUp = function () {
-//   display.textContent = numArr.reduce((a, b) => a + b);
-// };
-
-const addedUp = function () {
-  display.textContent = test(numArr.reduce((a, b) => a + b));
-  console.log(numArr);
 };
 
-const doMath = function () {
-  if (num === "-" || num === "") {
-  } else {
-    numArr.push(Number(num));
-    num = "";
-    console.log(numArr);
-    addedUp();
-  }
+decimal.addEventListener('click', pressDecimal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '.') pressDecimal();
+});
+
+// Equals logic
+const clearActiveOperator = () => {
+  [plus, minus, times, divide].forEach((operator) =>
+    operator.classList.remove('active-cell')
+  );
+};
+
+const calculate = function () {
+  if (!num) return;
+
+  let answer;
+
+  if (num === '+' || num === '-' || num === '*' || num === '/') return;
+  if (num[0] === '-') answer = Number(storedNum) - Number(num.slice(1));
+  if (num[0] === '*') answer = Number(storedNum) * Number(num.slice(1));
+  if (num[0] === '+') answer = Number(storedNum) + Number(num.slice(1));
+  if (num[0] === '/') answer = Number(storedNum) / Number(num.slice(1));
+  if (num[0] !== '+' && num[0] !== '-' && num[0] !== '*' && num[0] !== '/')
+    answer = num;
+
+  storedNum = answer;
+  display.textContent = formatNumber(answer);
+  num = '';
+  clearActiveOperator();
+  // console.log(
+  //   `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
+  // );
 };
 
 // Plus button operations
-plus.addEventListener("click", doMath);
+const pressPlus = () => {
+  clearActiveOperator();
 
-// Minus button operations
-minus.addEventListener("click", function () {
-  if (num === "-") {
+  if (!num) {
+  } else if (num[0] !== '+' && storedNum === '0') {
+    storedNum = num;
+  } else if (num === '+') {
+    return;
   } else {
-    numArr.push(Number(num));
-    num = "-";
-    addedUp();
+    calculate();
   }
+  plus.classList.add('active-cell');
+  num = '+';
+  console.log(`press plus num = ${num} | storedNum = ${storedNum}`);
+};
+
+plus.addEventListener('click', pressPlus);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '+') pressPlus();
 });
 
-// Add all numbers in numArr
-equals.addEventListener(`click`, doMath);
+// Minus button operations
+const pressMinus = () => {
+  clearActiveOperator();
+
+  if (!num) {
+  } else if (num[0] !== '-' && storedNum === '0') {
+    storedNum = num;
+  } else if (num === '-') {
+    return;
+  } else {
+    calculate();
+  }
+  minus.classList.add('active-cell');
+  num = '-';
+};
+
+minus.addEventListener('click', pressMinus);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '-') pressMinus();
+});
+
+// Multiplication button operations
+const pressTimes = () => {
+  clearActiveOperator();
+
+  if (!num) {
+  } else if (num[0] !== '*' && storedNum === '0') {
+    storedNum = num;
+    console.log(`storedNum = ${num}`);
+  } else if (num === '*') {
+    return;
+  } else {
+    calculate();
+  }
+  times.classList.add('active-cell');
+  num = '*';
+};
+
+times.addEventListener('click', pressTimes);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '*' || e.key === 'x') pressTimes();
+});
+
+// Division button operations
+const pressDivide = () => {
+  clearActiveOperator();
+
+  if (!num) {
+  } else if (num[0] !== '/' && storedNum === '0') {
+    storedNum = num;
+    console.log(`storedNum = ${num}`);
+  } else if (num === '/') {
+    return;
+  } else {
+    calculate();
+  }
+  divide.classList.add('active-cell');
+  num = '/';
+};
+
+divide.addEventListener('click', pressDivide);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/') pressDivide();
+});
+
+// Equals
+equals.addEventListener(`click`, calculate);
 document.addEventListener(`keydown`, function (e) {
-  if (e.key === "Enter") {
-    doMath();
+  if (e.key === 'Enter') {
+    calculate();
   }
 });
 
 // Change bg color
-document.querySelector(".change-bg").addEventListener("click", function () {
-  document.body.style.backgroundColor = "darkorange";
+document.querySelector('.change-bg').addEventListener('click', function () {
+  document.body.style.backgroundColor = 'darkorange';
 });
 
-// Reset to 0 (also clear bg color)
-document.querySelector(".clear").addEventListener("click", function () {
-  num = "";
+// Reset/Clear Calculator (also clear bg color)
+const clearCalc = () => {
+  num = '';
+  storedNum = '0';
   display.textContent = 0;
-  numArr.length = 0;
-  document.body.style.backgroundColor = "seashell";
-});
 
-document.addEventListener("keydown", function (e) {
-  if (e.key === "c") {
-    num = "";
-    display.textContent = 0;
-    numArr.length = 0;
-    document.body.style.backgroundColor = "seashell";
+  clearActiveOperator();
+
+  document.body.style.backgroundColor = 'seashell';
+};
+
+clear.addEventListener('click', clearCalc);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'c') {
+    clearCalc();
   }
 });
 
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Backspace") {
-    num = num.slice(0, -1);
-    display.textContent = test(Math.abs(num));
+// FIXME Maybe fixed? Requires further testing
+// Delete last number
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Backspace') {
+    if (!num || num === '+' || num === '-' || num === '*' || num === '/')
+      return;
+    if (num.length === 1) {
+      num = 0;
+    } else {
+      num = num.slice(0, -1);
+    }
+    display.textContent = num;
   }
 });
-
-// document.addEventListener("keydown", function (e) {
-//   console.log(e.key);
-// });
 
 /* Note 
 
-1. Add multiply/divide
-2. Highlight operator key in use
-3. Add keyboard support
+1. Add theme/color switcher
+2. Highlight operator key in use 
+3. Create operator variable? 
+4. Highlight buttons when typed
+5. Probably should get rid of operator in front of number (after completing #3) **This will fix the decimal problem where the operator shows up on pressing the number after the decimal. 
 
 */
 
-// bug Oscillating between '-' and '+' always appends '-'
-// bug Decimal disappears when number left of decimal (eg. x.0 will show x)
-// alert need to sort out the logic and make reuseable functions. Probably should rethink num variable and numArr for the mult/div update.
+// todo Work on decimal logic
+// todo Work out formatting issues with decimals
+// todo Figure out +/- key logic and column width
+// todo Need to fix zero so that a number can be added, subtracted, mult, div by zero.
+// **Fixed** something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit? || Using the formatNumber() function inside of the calculations for each operator caused storedNum to have commas, creating the NaN issue. Solved by only formatting the number on output to calc display.
