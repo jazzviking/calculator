@@ -13,9 +13,10 @@ const numCell = document.querySelectorAll('.num_cell');
 const plusMinus = document.querySelector('.plusminus');
 
 const formatNumber = (passedNum) =>
-  new Intl.NumberFormat(navigator.locale, { maximumFractionDigits: 10 }).format(
-    passedNum
-  );
+  new Intl.NumberFormat(navigator.locale, {
+    signDisplay: 'negative',
+    maximumFractionDigits: 10,
+  }).format(passedNum);
 
 // Logic variables
 let num = '';
@@ -26,98 +27,93 @@ let operator;
 const enterNumbers = (enteredNumber) => {
   if (num === '0') {
     num = enteredNumber;
-  } else if (
-    (num === '-' || num === '+' || num === '*' || num === '/') &&
-    enteredNumber === '0'
-  ) {
-    return;
   } else {
     num += enteredNumber;
   }
+
+  //fixme ideally this would be: display.textContent = formatNumber(num);
+  // however this introduces the issue of 0.0xxxx numbers being shown as 0
+  // Formatting ignores zeroes after the decimal until another integer is input
   display.textContent = num;
 };
 
 numCell.forEach((numCell) =>
   numCell.addEventListener('click', function () {
-    // console.log(num);
-    // num === '0' ? (num = numCell.textContent) : (num += numCell.textContent);
-    // display.textContent = num;
-
     enterNumbers(numCell.textContent);
   })
 );
 
 document.addEventListener('keydown', function (e) {
   if (e.key >= 0 && e.key <= 9) {
-    // num === '0' ? (num = e.key) : (num += e.key);
-    // display.textContent = num;
-    // console.log(num);
-
     enterNumbers(e.key);
+    highlightButtonsTimeout(e.code);
   }
 });
 
+function highlightButtonsTimeout(eCode) {
+  document.querySelector(`.${eCode}`).classList.add('active-cell');
+  setTimeout(() => {
+    document.querySelector(`.${eCode}`).classList.remove('active-cell');
+  }, 250);
+}
+
 // Decimal logic
-const pressDecimal = () => {
-  if (num === '' || num === '-' || num === '+' || num === '*' || num === '/') {
-    display.textContent = '0.';
+const pressDecimal = (eCode) => {
+  if (num === '') {
     num += '0.';
+    display.textContent = '0.';
   } else if (num.includes('.')) {
   } else {
     num += '.';
     display.textContent = `${formatNumber(num)}.`;
   }
+
+  highlightButtonsTimeout(eCode);
 };
 
 decimal.addEventListener('click', pressDecimal);
 document.addEventListener('keydown', (e) => {
-  if (e.key === '.') pressDecimal();
+  if (e.key === '.') pressDecimal(e.code);
 });
 
 // Equals logic
 const clearActiveOperator = () => {
-  [plus, minus, times, divide].forEach((operator) =>
-    operator.classList.remove('active-cell')
+  [plus, minus, times, divide].forEach((operatorButton) =>
+    operatorButton.classList.remove('active-cell')
   );
 };
 
 const calculate = function () {
-  if (!num) return;
-
   let answer;
 
-  if (num === '+' || num === '-' || num === '*' || num === '/') return;
-  if (num[0] === '-') answer = Number(storedNum) - Number(num.slice(1));
-  if (num[0] === '*') answer = Number(storedNum) * Number(num.slice(1));
-  if (num[0] === '+') answer = Number(storedNum) + Number(num.slice(1));
-  if (num[0] === '/') answer = Number(storedNum) / Number(num.slice(1));
-  if (num[0] !== '+' && num[0] !== '-' && num[0] !== '*' && num[0] !== '/')
-    answer = num;
+  if (!num) {
+    clearActiveOperator();
+    return;
+  }
+
+  if (operator === '+') answer = Number(storedNum) + Number(num);
+  if (operator === '-') answer = Number(storedNum) - Number(num);
+  if (operator === '*') answer = Number(storedNum) * Number(num);
+  if (operator === '/') answer = Number(storedNum) / Number(num);
+  if (!operator) answer = num;
 
   storedNum = answer;
   display.textContent = formatNumber(answer);
   num = '';
   clearActiveOperator();
-  // console.log(
-  //   `AFTER CALC | num: ${num}, storedNum: ${storedNum}, answer: ${answer}`
-  // );
 };
 
 // Plus button operations
 const pressPlus = () => {
   clearActiveOperator();
 
-  if (!num) {
-  } else if (num[0] !== '+' && storedNum === '0') {
-    storedNum = num;
-  } else if (num === '+') {
-    return;
-  } else {
+  if (num) {
     calculate();
   }
+
+  operator = '+';
+
   plus.classList.add('active-cell');
-  num = '+';
-  console.log(`press plus num = ${num} | storedNum = ${storedNum}`);
 };
 
 plus.addEventListener('click', pressPlus);
@@ -129,16 +125,13 @@ document.addEventListener('keydown', (e) => {
 const pressMinus = () => {
   clearActiveOperator();
 
-  if (!num) {
-  } else if (num[0] !== '-' && storedNum === '0') {
-    storedNum = num;
-  } else if (num === '-') {
-    return;
-  } else {
+  if (num) {
     calculate();
   }
+
+  operator = '-';
+
   minus.classList.add('active-cell');
-  num = '-';
 };
 
 minus.addEventListener('click', pressMinus);
@@ -150,17 +143,13 @@ document.addEventListener('keydown', (e) => {
 const pressTimes = () => {
   clearActiveOperator();
 
-  if (!num) {
-  } else if (num[0] !== '*' && storedNum === '0') {
-    storedNum = num;
-    console.log(`storedNum = ${num}`);
-  } else if (num === '*') {
-    return;
-  } else {
+  if (num) {
     calculate();
   }
+
+  operator = '*';
+
   times.classList.add('active-cell');
-  num = '*';
 };
 
 times.addEventListener('click', pressTimes);
@@ -172,17 +161,13 @@ document.addEventListener('keydown', (e) => {
 const pressDivide = () => {
   clearActiveOperator();
 
-  if (!num) {
-  } else if (num[0] !== '/' && storedNum === '0') {
-    storedNum = num;
-    console.log(`storedNum = ${num}`);
-  } else if (num === '/') {
-    return;
-  } else {
+  if (num) {
     calculate();
   }
+
+  operator = '/';
+
   divide.classList.add('active-cell');
-  num = '/';
 };
 
 divide.addEventListener('click', pressDivide);
@@ -191,10 +176,29 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Equals
-equals.addEventListener(`click`, calculate);
+equals.addEventListener(`click`, () => {
+  calculate();
+  operator = '';
+});
 document.addEventListener(`keydown`, function (e) {
   if (e.key === 'Enter') {
     calculate();
+    operator = '';
+  }
+});
+
+// Plus Minus
+const pressPlusMinus = () => {
+  num
+    ? (display.textContent = num *= -1)
+    : (display.textContent = storedNum *= -1);
+};
+
+plusMinus.addEventListener('click', pressPlusMinus);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 's') {
+    pressPlusMinus();
+    highlightButtonsTimeout(e.code);
   }
 });
 
@@ -207,6 +211,7 @@ document.querySelector('.change-bg').addEventListener('click', function () {
 const clearCalc = () => {
   num = '';
   storedNum = '0';
+  operator = '';
   display.textContent = 0;
 
   clearActiveOperator();
@@ -219,17 +224,17 @@ clear.addEventListener('click', clearCalc);
 document.addEventListener('keydown', (e) => {
   if (e.key === 'c') {
     clearCalc();
+    highlightButtonsTimeout(e.code);
   }
 });
 
-// FIXME Maybe fixed? Requires further testing
+// FIXME **FIXED?** Needs more testing
 // Delete last number
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Backspace') {
-    if (!num || num === '+' || num === '-' || num === '*' || num === '/')
-      return;
+    if (!num) return;
     if (num.length === 1) {
-      num = 0;
+      num = '0';
     } else {
       num = num.slice(0, -1);
     }
@@ -240,15 +245,19 @@ document.addEventListener('keydown', function (e) {
 /* Note 
 
 1. Add theme/color switcher
-2. Highlight operator key in use 
-3. Create operator variable? 
-4. Highlight buttons when typed
-5. Probably should get rid of operator in front of number (after completing #3) **This will fix the decimal problem where the operator shows up on pressing the number after the decimal. 
+2. ***DONE*** Highlight operator key in use 
+3. ***DONE*** Create operator variable? 
+4. ***DONE?*** Highlight buttons when typed ***Used timeout to remove 'active-cell' from class list. Is there a better way?
+5. ***DONE*** Probably should get rid of operator in front of number (after completing #3) **This will fix the decimal problem where the operator shows up on pressing the number after the decimal. 
+6. Figure out maximum realistic display digits and truncate Intl.NumberFormat
+    6a. Use box size to determine max display digits?
+    6b. Use if statement to split number format into scientific notation if over max digits?
 
 */
 
-// todo Work on decimal logic
+// todo ***FIXED?*** Work on decimal logic
 // todo Work out formatting issues with decimals
-// todo Figure out +/- key logic and column width
-// todo Need to fix zero so that a number can be added, subtracted, mult, div by zero.
+// todo ***DONE*** Figure out +/- key logic
+// TODO ***FIXED?*** column width
+// todo ***FIXED*** Need to fix zero so that a number can be added, subtracted, mult, div by zero.
 // **Fixed** something is wrong with the negative decimal logic. Figure out why NaN appears. Maybe an issue the the 10 digit formatting limit? || Using the formatNumber() function inside of the calculations for each operator caused storedNum to have commas, creating the NaN issue. Solved by only formatting the number on output to calc display.
