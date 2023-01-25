@@ -31,7 +31,7 @@ const enterNumbers = (enteredNumber) => {
     num += enteredNumber;
   }
 
-  //fixme ideally this would be: display.textContent = formatNumber(num);
+  // bug ideally this would be: display.textContent = formatNumber(num);
   // however this introduces the issue of 0.0xxxx numbers being shown as 0
   // Formatting ignores zeroes after the decimal until another integer is input
   display.textContent = num;
@@ -54,7 +54,7 @@ function highlightButtonsTimeout(eCode) {
   document.querySelector(`.${eCode}`).classList.add('active-cell');
   setTimeout(() => {
     document.querySelector(`.${eCode}`).classList.remove('active-cell');
-  }, 250);
+  }, 100);
 }
 
 // Decimal logic

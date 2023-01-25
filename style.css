@@ -55,10 +55,10 @@ table {
   cursor: pointer;
 }
 
-.cells:active {
+/* .cells:active {
   background-color: hsl(195, 100%, 90%);
   box-shadow: none;
-}
+} */
 
 .top-container {
   display: flex;
@@ -86,7 +86,8 @@ button {
 }
 
 .active-cell,
-.active-cell:hover {
+.active-cell:hover,
+.cells:active {
   background-color: #444;
   color: #eee;
   box-shadow: none;
