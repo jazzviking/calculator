@@ -1,12 +1,11 @@
-html,
-body {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 .container {
-  width: 50%;
+  width: 60%;
 
   margin: 50px auto;
   font-size: 6vmin;
@@ -63,16 +62,15 @@ table {
 .top-container {
   display: flex;
   justify-content: center;
-  /* fixme Fix Margin */
-  margin: -30px;
 }
 
 .change-bg {
   width: 100px;
-  height: 100px;
+  height: 50px;
   background-color: darkorange;
-  padding: 0;
-  display: flex;
+
+  border: 2px #777 solid;
+  border-radius: 50px;
 }
 
 button {
@@ -92,4 +90,11 @@ button {
   color: #eee;
   box-shadow: none;
   border: none;
+}
+
+@media (max-width: 950px) {
+  .container {
+    width: 100%;
+    margin: 8rem auto 0;
+  }
 }
