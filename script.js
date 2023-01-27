@@ -181,9 +181,10 @@ equals.addEventListener(`click`, () => {
   operator = '';
 });
 document.addEventListener(`keydown`, function (e) {
-  if (e.key === 'Enter') {
+  if (e.key === 'Enter' || e.key === '=') {
     calculate();
     operator = '';
+    highlightButtonsTimeout('equals');
   }
 });
 
@@ -222,7 +223,7 @@ const clearCalc = () => {
 clear.addEventListener('click', clearCalc);
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'c') {
+  if (e.key === 'c' || e.key === 'Clear') {
     clearCalc();
     highlightButtonsTimeout(e.code);
   }
