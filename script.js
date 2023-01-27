@@ -187,7 +187,7 @@ document.addEventListener(`keydown`, function (e) {
   }
 });
 
-// Plus Minus
+// Plus-Minus
 const pressPlusMinus = () => {
   num
     ? (display.textContent = num *= -1)
@@ -202,7 +202,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Change bg color
+// Change BG color
 document.querySelector('.change-bg').addEventListener('click', function () {
   document.body.style.backgroundColor = 'darkorange';
 });
@@ -252,6 +252,9 @@ document.addEventListener('keydown', function (e) {
 6. Figure out maximum realistic display digits and truncate Intl.NumberFormat
     6a. Use box size to determine max display digits?
     6b. Use if statement to split number format into scientific notation if over max digits?
+7. Use grid instead of table/rows?
+8. Modernize appearance (flat UI?)
+
 
 */
 
