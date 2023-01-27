@@ -191,8 +191,8 @@ document.addEventListener(`keydown`, function (e) {
 // Plus-Minus
 const pressPlusMinus = () => {
   num
-    ? (display.textContent = num *= -1)
-    : (display.textContent = storedNum *= -1);
+    ? (display.textContent = formatNumber((num *= -1)))
+    : (display.textContent = formatNumber((storedNum *= -1)));
 };
 
 plusMinus.addEventListener('click', pressPlusMinus);
